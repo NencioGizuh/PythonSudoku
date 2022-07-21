@@ -13,31 +13,13 @@ import random
 
 sudoku = {}
 
-def CheckForSameNumber(dictionary, nummer):
-#We moeten checken in de dictionary of een key/value pair het nummer heeft wat we willen toevoegen
-#Als het nummer gelijk is aan elkaar genereer dan een nieuw nummer tussen 1 en 9
-    for key, value in dictionary.items():
-        try:
-            if int(value) == nummer:
-                randomNumber = random.choice([i for i in range(0,9) if i not in [nummer]])
-                print(randomNumber)
-                #randomNumber = str(random.randint(1, 9))
-                if randomNumber == nummer:
-                    continue
-                dictionary[key] = randomNumber
-            else:
-                continue
-        except ValueError:
-            continue
-    return dictionary
-
-CheckForSameNumber({1: "5"}, 5)
-
-def GenerateCellen():
+def GenerateCellen(sudokuCounter):
+    cellenOptions = [1,2,3,4,5,6,7,8,9]
+    randomInt = 8
+    celOption = 0
     cellen = {}
     counter = 0
-    sudokuCounter = 0
-    while len(cellen) <= 9:
+    while len(cellen) < 9:
         if(counter == 9):
             break
         filledOrNotFilled = random.randint(0,1)
@@ -47,27 +29,33 @@ def GenerateCellen():
             counter += 1
             continue
         elif filledOrNotFilled == 1:
-            randomNumber = str(random.randint(1, 9))
-            CheckForSameNumber(cellen, randomNumber)
-            cel = {counter: randomNumber}
+            randomNumber = random.randint(0,randomInt)
+            randomInt -= 1
+            celOption = cellenOptions[randomNumber]
+            cellenOptions.remove(cellenOptions[randomNumber])
+            cel = {counter: str(celOption)}
             cellen.update(cel)
             counter += 1
             continue
-
+    #print(cellenOptions)
+    #print(cellen)
     sudoku[sudokuCounter] = cellen
     sudokuCounter += 1
-    if sudokuCounter == 9:
-        sudokuCounter = 0
     return cellen
 
 def GenerateSudoku():
-    while len(sudoku) < 9:
-        GenerateCellen()
+    GenerateCellen(0)
+    GenerateCellen(1)
+    GenerateCellen(2)
+    GenerateCellen(4)
+    GenerateCellen(5)
+    GenerateCellen(6)
+    GenerateCellen(7)
+    GenerateCellen(8)
     print(sudoku)
     return sudoku
 
-#GenerateSudoku()
-
+GenerateSudoku()
 
 
 def CheckHorizontal():
